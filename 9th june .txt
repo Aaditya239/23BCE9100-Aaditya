@@ -1,0 +1,103 @@
+MONGODB REPLICA SET SETUP
+
+1. Create Directories
+
+C:\data\db0
+C:\data\db1
+C:\data\db2
+
+2. Start MongoDB Instances
+
+mongod --port 27017 --dbpath C:\data\db0 --replSet myReplSet
+
+mongod --port 27018 --dbpath C:\data\db1 --replSet myReplSet
+
+mongod --port 27019 --dbpath C:\data\db2 --replSet myReplSet
+
+3. Connect
+
+mongosh --port 27017
+
+4. Initialize Replica Set
+
+rs.initiate({
+  _id: "myReplSet",
+  members: [
+    { _id: 0, host: "localhost:27017" },
+    { _id: 1, host: "localhost:27018" },
+    { _id: 2, host: "localhost:27019" }
+  ]
+})
+
+5. Verify
+
+rs.conf()
+
+rs.status()
+
+db.hello()
+
+6. Add Member (Optional)
+
+rs.add("localhost:27020")
+
+7. Create Database and Insert Data
+
+use company
+
+db.employee.insertOne({
+  empid: 101,
+  name: "Aaditya",
+  department: "CSE",
+  salary: 60000
+})
+
+8. Display Data
+
+db.employee.find().pretty()
+
+9. Connect to Secondary
+
+mongosh --port 27018
+
+rs.secondaryOk()
+
+use company
+
+db.employee.find().pretty()
+
+10. Final Verification
+
+rs.status()
+
+rs.conf()
+
+db.hello()
+
+db.employee.find().pretty()
+
+Output:
+
+{
+  "set": "myReplSet",
+  "members": [
+    {
+      "_id": 0,
+      "name": "localhost:27017",
+      "stateStr": "PRIMARY"
+    },
+    {
+      "_id": 1,
+      "name": "localhost:27018",
+      "stateStr": "SECONDARY"
+    },
+    {
+      "_id": 2,
+      "name": "localhost:27019",
+      "stateStr": "SECONDARY"
+    }
+  ]
+}
+
+Result:
+Replica set created successfully with one PRIMARY and two SECONDARY nodes. Data inserted into PRIMARY is replicated to SECONDARY nodes.
