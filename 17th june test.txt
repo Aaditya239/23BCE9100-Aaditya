@@ -1,0 +1,497 @@
+# MongoDB Queries (Q1–Q13)
+
+## Dataset Setup
+
+
+use schoolDB
+
+// ---------- students collection ----------
+db.students.insertMany([
+  { _id: 1, name: "Arjun", age: 21, gpa: 8.7, city: "Coimbatore", subjects: ["Math", "Physics"], scholarship: true },
+  { _id: 2, name: "Priya", age: 19, gpa: 9.1, city: "Chennai", subjects: ["Biology", "Chemistry", "Math"], scholarship: false },
+  { _id: 3, name: "Karthik", age: 22, gpa: 6.5, city: "Coimbatore", subjects: ["History"], scholarship: false },
+  { _id: 4, name: "Divya", age: 20, gpa: 7.8, city: "Madurai", subjects: ["Math", "Computer Science"], scholarship: true },
+  { _id: 5, name: "Rahul", age: 23, gpa: 5.9, city: "Chennai", subjects: [] }
+])
+
+// ---------- orders collection ----------
+db.orders.insertMany([
+  { _id: 101, customer: "Arjun", item: "Laptop", price: 55000, qty: 1, status: "delivered" },
+  { _id: 102, customer: "Priya", item: "Phone", price: 20000, qty: 2, status: "shipped" },
+  { _id: 103, customer: "Arjun", item: "Mouse", price: 500, qty: 3, status: "delivered" },
+  { _id: 104, customer: "Divya", item: "Keyboard", price: 1500, qty: 1, status: "pending" },
+  { _id: 105, customer: "Karthik", item: "Monitor", price: 9000, qty: 2, status: "delivered" }
+])
+```
+
+
+## Q1. insertOne()
+
+
+db.students.insertOne({
+   _id: 6,
+   name: "Aaditya",
+   age: 20,
+   gpa: 8.5,
+   city: "Amaravati",
+   subjects: ["Math", "AI"],
+   scholarship: true
+})
+
+## Q2. insertMany()
+
+
+db.students.insertMany([
+  {
+    _id: 7,
+    name: "Aaditya",
+    age: 20,
+    gpa: 8.5,
+    city: "Amaravati",
+    subjects: ["AI", "Math"],
+    scholarship: true
+  },
+  {
+    _id: 8,
+    name: "Neha",
+    age: 21,
+    gpa: 8.9,
+    city: "Hyderabad",
+    subjects: ["Physics", "Math"],
+    scholarship: false
+  }
+])
+```
+
+---
+
+## Q3. findOne() and find()
+
+
+db.students.findOne({ city: "Chennai" })
+
+db.students.find({ city: "Chennai" })
+
+db.orders.findOne({ customer: "Arjun" })
+
+db.orders.find({ customer: "Arjun" })
+
+
+## Q4. Projection
+
+
+db.students.find(
+   {},
+   { name: 1, city: 1, _id: 0 }
+)
+
+db.orders.find(
+   {},
+   { customer: 1, item: 1, _id: 0 }
+)
+
+
+
+## Q5. $eq
+
+
+db.students.find({
+   city: { $eq: "Chennai" }
+})
+
+db.orders.find({
+   status: { $eq: "delivered" }
+})
+
+
+
+
+## Q6. $lt and $lte
+
+
+db.students.find({
+   gpa: { $lt: 8.0 }
+})
+
+db.students.find({
+   gpa: { $lte: 8.0 }
+})
+
+
+
+## Q7. $gt and $gte
+
+
+db.students.find({
+   gpa: { $gt: 8.0 }
+})
+
+db.students.find({
+   gpa: { $gte: 8.0 }
+})
+
+
+
+## Q8. $ne
+
+
+db.students.find({
+   city: { $ne: "Chennai" }
+})
+
+db.orders.find({
+   status: { $ne: "delivered" }
+})
+
+
+
+## Q9. $in
+
+
+db.students.find({
+   city: { $in: ["Chennai", "Madurai"] }
+})
+
+db.orders.find({
+   status: { $in: ["delivered", "shipped"] }
+})
+
+
+
+
+## Q10. $nin
+
+
+db.students.find({
+   city: { $nin: ["Chennai", "Madurai"] }
+})
+
+db.orders.find({
+   status: { $nin: ["delivered", "shipped"] }
+})
+
+
+
+## Q11. $and
+
+
+
+db.students.find({
+   $and: [
+      { city: "Chennai" },
+      { gpa: { $gt: 8 } }
+   ]
+})
+
+db.orders.find({
+   $and: [
+      { status: "delivered" },
+      { price: { $gt: 5000 } }
+   ]
+})
+
+
+## Q12. $or
+
+
+db.students.find({
+   $or: [
+      { city: "Chennai" },
+      { gpa: { $gt: 8.5 } }
+   ]
+})
+
+db.orders.find({
+   $or: [
+      { status: "pending" },
+      { price: { $gt: 50000 } }
+   ]
+})
+
+
+## Q13. $not
+
+
+db.students.find({
+   gpa: { $not: { $gt: 8 } }
+})
+
+db.orders.find({
+   price: { $not: { $gt: 10000 } }
+})
+
+
+
+
+# MongoDB Employee Collection Queries (Q1–Q12)
+
+db.employees.insertMany([
+{
+    empId: 101,
+    name: "Arun",
+    age: 25,
+    department: "IT",
+    salary: 45000,
+    city: "Chennai",
+    experience: 3,
+    skills: ["Java","MongoDB","Spring"],
+    active: true
+},
+{
+    empId: 102,
+    name: "Priya",
+    age: 28,
+    department: "HR",
+    salary: 55000,
+    city: "Bangalore",
+    experience: 5,
+    skills: ["Recruitment","Training"],
+    active: true
+},
+{
+    empId: 103,
+    name: "Rahul",
+    age: 32,
+    department: "IT",
+    salary: 75000,
+    city: "Mumbai",
+    experience: 8,
+    skills: ["Python","MongoDB","AWS"],
+    active: true
+},
+{
+    empId: 104,
+    name: "Sneha",
+    age: 26,
+    department: "Finance",
+    salary: 50000,
+    city: "Delhi",
+    experience: 4,
+    skills: ["Excel","Taxation"],
+    active: false
+},
+{
+    empId: 105,
+    name: "Karthik",
+    age: 30,
+    department: "IT",
+    salary: 68000,
+    city: "Chennai",
+    experience: 7,
+    skills: ["NodeJS","MongoDB","React"],
+    active: true
+}
+]);
+
+
+## Q1. Insert one employee document
+
+db.employees.insertOne({
+    empId: 106,
+    name: "Aaditya",
+    age: 21,
+    department: "IT",
+    salary: 60000,
+    city: "Amaravati",
+    experience: 2,
+    skills: ["Java","MongoDB"],
+    active: true
+})
+
+
+
+
+## Q2. Insert multiple employee documents
+
+
+db.employees.insertMany([
+{
+    empId: 107,
+    name: "Neha",
+    age: 24,
+    department: "HR",
+    salary: 48000,
+    city: "Hyderabad",
+    experience: 2,
+    skills: ["Training"],
+    active: true
+},
+{
+    empId: 108,
+    name: "Rohit",
+    age: 29,
+    department: "IT",
+    salary: 70000,
+    city: "Pune",
+    experience: 6,
+    skills: ["Python","AWS"],
+    active: true
+}
+])
+
+
+
+
+## Q3. Find one employee from IT department
+
+
+db.employees.findOne({
+    department: "IT"
+})
+```
+
+
+
+## Q4. Display all employees
+
+
+db.employees.find()
+
+
+
+
+## Q5. Display only name and salary
+
+db.employees.find(
+    {},
+    {
+        name: 1,
+        salary: 1,
+        _id: 0
+    }
+)
+
+
+
+
+## Q6. Find employees with salary equal to 50000
+
+
+db.employees.find({
+    salary: { $eq: 50000 }
+})
+
+
+
+
+## Q7. Find employees with salary less than 60000
+
+
+db.employees.find({
+    salary: { $lt: 60000 }
+})
+
+
+
+## Q8. Find employees with salary greater than or equal to 60000
+
+
+db.employees.find({
+    salary: { $gte: 60000 }
+})
+
+
+
+
+## Q9. Find employees whose age is not equal to 30
+
+
+db.employees.find({
+    age: { $ne: 30 }
+})
+
+
+
+
+## Q10. Find employees from Chennai or Mumbai
+
+
+db.employees.find({
+    city: { $in: ["Chennai", "Mumbai"] }
+})
+
+
+---
+
+## Q11. Find employees not from Chennai
+
+
+db.employees.find({
+    city: { $ne: "Chennai" }
+})
+
+or
+
+db.employees.find({
+    city: { $nin: ["Chennai"] }
+})
+
+
+## Q12. Find IT employees with salary > 50000
+
+
+db.employees.find({
+    $and: [
+        { department: "IT" },
+        { salary: { $gt: 50000 } }
+    ]
+})
+
+
+
+or
+
+db.employees.find({
+    department: "IT",
+    salary: { $gt: 50000 }
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
